@@ -1,7 +1,7 @@
 extends KinematicBody
 
 export var speed = 1.5
-export var mouse_sensitivity = 1
+export var mouse_sensitivity = 0.01
 
 var velocity = Vector3(0,0,0)
 
