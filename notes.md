@@ -9,3 +9,5 @@
 - Good audio
 - G'old UI
 - Integrate the suckless philosophy
+    - Nothing without reason
+    - No bloat
