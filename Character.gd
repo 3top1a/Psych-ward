@@ -3,6 +3,9 @@ extends KinematicBody
 export var speed = 1.5
 export var mouse_sensitivity = 0.01
 
+export var ACCELERATION = 15.0
+export var DEACCELERATION = 20.0
+
 var velocity = Vector3(0,0,0)
 
 func _physics_process(delta):
@@ -17,11 +20,11 @@ func _physics_process(delta):
 		direction += -global_transform.basis.z
 	direction.normalized()
 	
-	velocity.x = direction.x * speed
-	velocity.z = direction.z * speed
 	velocity.y = 0
 	
-	velocity = move_and_slide_with_snap(velocity, Vector3(0.01,0.01,0.01), Vector3(0, 1, 0), true)
+	velocity = velocity.linear_interpolate(direction * speed, ACCELERATION * delta)
+	
+	velocity = move_and_slide_with_snap(velocity, Vector3(0.01,0.01,0.01), Vector3.UP, true)
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
