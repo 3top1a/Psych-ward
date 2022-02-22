@@ -1,5 +1,7 @@
 extends KinematicBody
 
+export var DoJump = false
+
 export var speed = 8
 export var mouse_sensitivity = 0.01
 export var gun_sensitivity = 1.0
@@ -7,7 +9,8 @@ export var gun_sensitivity = 1.0
 export var ACCELERATION = 20.0
 export var GRAVITY = 15.0
 export var JUMP = 8.0
-var gravity_velocity = 0
+export var BULLET_SPEED = 20.0
+export var SHOOT_TIME = .12
 
 export var XSWAY = 20.0
 export var YSWAY = 10.0
@@ -20,9 +23,13 @@ export var SWAY_NORMAL = Vector3()
 export onready var gun = $"Pivot/GunTween/Gun pivot"
 export onready var hand = $"Pivot/GunTween"
 
+var gravity_velocity = 0
+var shoot_timer = 0
 var mouse_mov = Vector3()
 var velocity = Vector3(0,0,0)
 var gun_velocity = Vector3(0,0,0)
+
+export onready var bullet = preload("res://Bullet.tscn")
 
 func _ready():
 	gun.set_as_toplevel(true)
@@ -48,7 +55,8 @@ func _process(delta):
 func _physics_process(delta):
 	## Pos copy
 	
-	$"../PositionCopy".global_transform.origin = global_transform.origin
+	$"../PositionCopy".global_transform.origin.x = global_transform.origin.x
+	$"../PositionCopy".global_transform.origin.z = global_transform.origin.z
 	
 	## Directionals
 	var direction = Vector3.ZERO
@@ -61,16 +69,17 @@ func _physics_process(delta):
 	if Input.is_action_pressed("move_up"):
 		direction += -global_transform.basis.z
 	direction.normalized()
-
+	
 	## Jump & gravity
-	if not transform.origin.y < 0.01:
-		gravity_velocity -= GRAVITY * delta
-	
-	if Input.is_action_just_pressed("jump") and transform.origin.y < 0.01:
-		gravity_velocity = JUMP
-	
-	move_and_slide(Vector3(0, gravity_velocity, 0), Vector3.UP)
-	
+	if(DoJump):
+		if not transform.origin.y < 0.01:
+			gravity_velocity -= GRAVITY * delta
+		
+		if Input.is_action_just_pressed("jump") and transform.origin.y < 0.01:
+			gravity_velocity = JUMP
+		
+		move_and_slide(Vector3(0, gravity_velocity, 0), Vector3.UP)
+		
 	## Move
 	
 	velocity = velocity.linear_interpolate(direction * speed, ACCELERATION * delta)
@@ -81,7 +90,17 @@ func _physics_process(delta):
 	
 	if transform.origin.y < 0:
 		transform.origin.y = 0
-
+	
+	## Shoot
+	
+	shoot_timer -= delta
+	
+	if Input.is_action_pressed("fire") and shoot_timer < 0.0:
+		var i = bullet.instance()
+		i.set_as_toplevel(true)
+		i.global_transform.origin = $Pivot/Camera.global_transform.origin
+		get_tree().get_root().add_child(i)
+		shoot_timer = SHOOT_TIME
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
