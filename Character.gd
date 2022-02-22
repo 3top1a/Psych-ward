@@ -7,8 +7,22 @@ export var gun_sensitivity = 1
 export var ACCELERATION = 15.0
 export var DEACCELERATION = 20.0
 
+export var XSWAY = 20.0
+export var YSWAY = 10.0
+
+export onready var gun = $"Pivot/GunTween/Gun pivot"
+export onready var hand = $"Pivot/GunTween"
+
 var velocity = Vector3(0,0,0)
 var gun_velocity = Vector3(0,0,0)
+
+func _ready():
+	gun.set_as_toplevel(true)
+
+func _process(delta):
+	gun.global_transform.origin = hand.global_transform.origin
+	gun.rotation.y = lerp_angle(gun.rotation.y, rotation.y, YSWAY * delta)
+	gun.rotation.x = lerp_angle(gun.rotation.x, $Pivot.rotation.x, XSWAY * delta)
 
 func _physics_process(delta):
 	var direction = Vector3.ZERO
@@ -28,13 +42,6 @@ func _physics_process(delta):
 	
 	velocity = move_and_slide_with_snap(velocity, Vector3(0.01,0.01,0.01), Vector3.UP, true)
 	
-	var gun_movement = Vector3.ZERO
-	gun_movement.z = -(gun_velocity.x)*delta*12
-	gun_movement.y = -(gun_velocity.y)*delta*10
-	
-	$"Pivot/GunTween/Gun pivot".rotation_degrees = $"Pivot/GunTween/Gun pivot".rotation_degrees.linear_interpolate(gun_movement, ACCELERATION * delta)
-#		$"Pivot/GunTween/Gun pivot".rotation_degrees = $"Pivot/GunTween/Gun pivot".rotation_degrees.linear_interpolate(Vector3.ZERO, ACCELERATION * delta)
-
 
 
 func _unhandled_input(event):
@@ -42,4 +49,3 @@ func _unhandled_input(event):
 		rotate_y(-event.relative.x * mouse_sensitivity)
 		$Pivot.rotate_x(-event.relative.y * mouse_sensitivity)
 		$Pivot.rotation.x = clamp($Pivot.rotation.x, -1.2, 1.2)
-		gun_velocity = Vector3(clamp(event.relative.y, -gun_sensitivity, gun_sensitivity), clamp(event.relative.x, -gun_sensitivity, gun_sensitivity), 0)
