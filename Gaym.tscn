@@ -22,10 +22,11 @@ script = ExtResource( 1 )
 environment = ExtResource( 3 )
 
 [node name="Ground" type="CSGMesh" parent="Start/Level"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -1.00185, 0 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
 mesh = SubResource( 1 )
 
 [node name="Player" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88125, 0 )
 
 [node name="Character" type="KinematicBody" parent="Player"]
 script = ExtResource( 2 )
