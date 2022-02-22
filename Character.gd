@@ -21,8 +21,8 @@ func _ready():
 
 func _process(delta):
 	gun.global_transform.origin = hand.global_transform.origin
-	gun.rotation.y = lerp_angle(gun.rotation.y, rotation.y, YSWAY * delta)
-	gun.rotation.x = lerp_angle(gun.rotation.x, $Pivot.rotation.x, XSWAY * delta)
+	gun.rotation.y = lerp_angle(gun.rotation.y, rotation.y, XSWAY * delta)
+	gun.rotation.x = lerp_angle(gun.rotation.x, $Pivot.rotation.x, YSWAY * delta)
 
 func _physics_process(delta):
 	var direction = Vector3.ZERO
