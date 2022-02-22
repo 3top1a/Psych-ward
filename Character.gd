@@ -2,11 +2,13 @@ extends KinematicBody
 
 export var speed = 1.5
 export var mouse_sensitivity = 0.01
+export var gun_sensitivity = 1
 
 export var ACCELERATION = 15.0
 export var DEACCELERATION = 20.0
 
 var velocity = Vector3(0,0,0)
+var gun_velocity = Vector3(0,0,0)
 
 func _physics_process(delta):
 	var direction = Vector3.ZERO
@@ -25,9 +27,19 @@ func _physics_process(delta):
 	velocity = velocity.linear_interpolate(direction * speed, ACCELERATION * delta)
 	
 	velocity = move_and_slide_with_snap(velocity, Vector3(0.01,0.01,0.01), Vector3.UP, true)
+	
+	var gun_movement = Vector3.ZERO
+	gun_movement.z = -(gun_velocity.x)*delta*12
+	gun_movement.y = -(gun_velocity.y)*delta*10
+	
+	$"Pivot/GunTween/Gun pivot".rotation_degrees = $"Pivot/GunTween/Gun pivot".rotation_degrees.linear_interpolate(gun_movement, ACCELERATION * delta)
+#		$"Pivot/GunTween/Gun pivot".rotation_degrees = $"Pivot/GunTween/Gun pivot".rotation_degrees.linear_interpolate(Vector3.ZERO, ACCELERATION * delta)
+
+
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * mouse_sensitivity)
 		$Pivot.rotate_x(-event.relative.y * mouse_sensitivity)
 		$Pivot.rotation.x = clamp($Pivot.rotation.x, -1.2, 1.2)
+		gun_velocity = Vector3(clamp(event.relative.y, -gun_sensitivity, gun_sensitivity), clamp(event.relative.x, -gun_sensitivity, gun_sensitivity), 0)

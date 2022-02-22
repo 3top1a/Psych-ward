@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Gaym.gd" type="Script" id=1]
 [ext_resource path="res://Character.gd" type="Script" id=2]
@@ -10,6 +10,10 @@ size = Vector2( 5, 5 )
 [sub_resource type="CylinderShape" id=2]
 radius = 0.5
 height = 1.7
+
+[sub_resource type="SpatialMaterial" id=3]
+render_priority = 5
+albedo_color = Color( 0.564706, 0.564706, 0.564706, 1 )
 
 [node name="Gaym" type="Spatial"]
 script = ExtResource( 1 )
@@ -30,11 +34,25 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88125, 0 )
 
 [node name="Character" type="KinematicBody" parent="Player"]
 script = ExtResource( 2 )
+speed = 5.0
+ACCELERATION = 20.0
 
 [node name="CollisionShape" type="CollisionShape" parent="Player/Character"]
 shape = SubResource( 2 )
 
 [node name="Pivot" type="Spatial" parent="Player/Character"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64953, -0.194395 )
 
 [node name="Camera" type="Camera" parent="Player/Character/Pivot"]
 fov = 90.0
+
+[node name="GunTween" type="Spatial" parent="Player/Character/Pivot"]
+
+[node name="Gun pivot" type="Spatial" parent="Player/Character/Pivot/GunTween"]
+
+[node name="CSGBox" type="CSGBox" parent="Player/Character/Pivot/GunTween/Gun pivot"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.384, -0.611695 )
+width = 0.227718
+height = 0.233942
+depth = 1.04174
+material = SubResource( 3 )
