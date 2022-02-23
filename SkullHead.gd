@@ -1,14 +1,34 @@
 extends RigidBody
 
-export var speed = 5
-export var rot_speed = 5
+export var speed = 30
+export var rot_speed = 2
+
+export(Curve) var yCurve
+export(float) var yHeight = 5
+export(float) var yBaseHeight = 1.5
+export(float) var yDist = 50
 
 func _physics_process(delta):
-	var target_position = get_tree().get_root().get_node("Game/Player/Character").global_transform
+	var target_position = get_tree().get_root().get_node("Game/Player/Character/Pivot/Camera").global_transform
+#
+#	global_translate(
+#		global_transform.origin.direction_to(get_tree().get_root().get_node("Game/Player/Character").global_transform.origin)
+#		* speed * delta)
 	
-	global_translate(
-		global_transform.origin.direction_to(get_tree().get_root().get_node("Game/Player/Character").global_transform.origin)
-		* speed * delta)
+	var direction = target_position.origin - global_transform.origin
+	direction = direction.normalized()
 	
-	if global_transform.origin.y < 0.5:
+	var rot_am = direction.cross(global_transform.basis.z)
+	rot_am.x = rot_am.x * delta * rot_speed
+	rot_am.y = rot_am.y * delta * rot_speed
+	
+	rotate(Vector3.UP, rot_am.y)
+	rotate(Vector3.RIGHT, rot_am.x)
+	
+	global_translate(-global_transform.basis.z * speed * delta)
+	
+	var yI = target_position.origin.distance_to(global_transform.origin)
+	transform.origin.y = yBaseHeight + yCurve.interpolate( min(yI / yDist, 1.0) ) * yHeight
+	
+	if global_transform.origin.y < 0.0:
 		queue_free()
