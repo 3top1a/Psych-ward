@@ -25,11 +25,12 @@ export onready var hand = $"Pivot/GunTween"
 
 var gravity_velocity = 0
 var shoot_timer = 0
+var imaginary = false
 var mouse_mov = Vector3()
 var velocity = Vector3(0,0,0)
 var gun_velocity = Vector3(0,0,0)
 
-export onready var bullet = preload("res://Bullet.tscn")
+export onready var bullet = preload("res://Prefbs/Bullet.tscn")
 
 func _ready():
 	gun.set_as_toplevel(true)
@@ -83,7 +84,13 @@ func _physics_process(delta):
 			gravity_velocity = JUMP
 		
 		move_and_slide(Vector3(0, gravity_velocity, 0), Vector3.UP)
-		
+	else:
+		if Input.is_action_just_pressed("jump"):
+			imaginary = !imaginary
+			
+			if imaginary:
+				
+	
 	## Move
 	velocity = velocity.linear_interpolate(direction * speed, ACCELERATION * delta)
 	
@@ -99,7 +106,7 @@ func _physics_process(delta):
 	if Input.is_action_pressed("fire") and shoot_timer < 0.0:
 		var i = bullet.instance()
 		i.set_as_toplevel(true)
-		i.forward_dir = -$Pivot/Camera/Position3D.global_transform.basis.z
+		i.apply_impulse(i.transform.basis.z, -transform.basis.z * BULLET_SPEED)
 		i.global_transform.origin = $Pivot/Camera/Position3D.global_transform.origin
 		get_tree().get_root().add_child(i)
 		shoot_timer = SHOOT_TIME
