@@ -36,8 +36,8 @@ func _ready():
 
 func _process(delta):
 	## Ground
-	$"../PositionCopy/Ground".material.set_shader_param("X", global_transform.origin.x)
-	$"../PositionCopy/Ground".material.set_shader_param("Y", global_transform.origin.z)
+	$"../Imaginary/Ground".material.set_shader_param("X", global_transform.origin.x)
+	$"../Imaginary/Ground".material.set_shader_param("Y", global_transform.origin.z)
 	
 	## Sway
 	gun.global_transform.origin = hand.global_transform.origin
@@ -59,8 +59,8 @@ func _process(delta):
 func _physics_process(delta):
 	## Pos copy
 	
-	$"../PositionCopy".global_transform.origin.x = global_transform.origin.x
-	$"../PositionCopy".global_transform.origin.z = global_transform.origin.z
+	$"../Imaginary".global_transform.origin.x = global_transform.origin.x
+	$"../Imaginary".global_transform.origin.z = global_transform.origin.z
 	
 	## Directionals
 	var direction = Vector3.ZERO
