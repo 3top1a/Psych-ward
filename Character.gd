@@ -31,6 +31,8 @@ var velocity = Vector3(0,0,0)
 var gun_velocity = Vector3(0,0,0)
 
 export onready var bullet = preload("res://Prefbs/Bullet.tscn")
+export onready var imaginary_env = preload("res://Imaginary.tres")
+export onready var real_env = preload("res://Real.tres")
 
 func _ready():
 	gun.set_as_toplevel(true)
@@ -89,7 +91,19 @@ func _physics_process(delta):
 			imaginary = !imaginary
 			
 			if imaginary:
+				$"../Imaginary".visible = true
+				$"../Real".visible = false
+				$"../Real/MeshInstance/ward_room/Camera/Camera_Orientation".current = false
+				$"Pivot/Camera".current = true
 				
+				$"../WorldEnvironment".set_environment(imaginary_env)
+			else:
+				$"../Imaginary".visible = false
+				$"../Real".visible = true
+				$"../Real/MeshInstance/ward_room/Camera/Camera_Orientation".current = true
+				$"Pivot/Camera".current = false
+				
+				$"../WorldEnvironment".set_environment(real_env)
 	
 	## Move
 	velocity = velocity.linear_interpolate(direction * speed, ACCELERATION * delta)
@@ -103,11 +117,12 @@ func _physics_process(delta):
 	## Shoot
 	shoot_timer -= delta
 	
-	if Input.is_action_pressed("fire") and shoot_timer < 0.0:
+	if Input.is_action_pressed("fire") and shoot_timer < 0.0 and imaginary:
 		var i = bullet.instance()
 		i.set_as_toplevel(true)
-		i.apply_impulse(i.transform.basis.z, -transform.basis.z * BULLET_SPEED)
+		i.apply_impulse($Pivot/Camera/Position3D.transform.basis.z, -$Pivot/Camera.transform.basis.z * BULLET_SPEED)
 		i.global_transform.origin = $Pivot/Camera/Position3D.global_transform.origin
+		i.global_transform.basis.z = $Pivot/Camera.global_transform.basis.z
 		get_tree().get_root().add_child(i)
 		shoot_timer = SHOOT_TIME
 

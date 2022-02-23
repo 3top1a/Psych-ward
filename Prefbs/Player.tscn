@@ -93,22 +93,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88125, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.851925, 0 )
 visible = false
 script = ExtResource( 1 )
-DoJump = null
-speed = null
-mouse_sensitivity = null
-gun_sensitivity = null
-ACCELERATION = null
-GRAVITY = null
-JUMP = null
 BULLET_SPEED = 60.0
-SHOOT_TIME = 0.05
-XSWAY = null
-YSWAY = null
-SWAY_SMOOTH = null
-SWAY_THRESHOLD = null
 SWAY_LEFT = Vector3( 0, 0.2, 0 )
 SWAY_RIGHT = Vector3( 0, -0.2, 0 )
-SWAY_NORMAL = null
 
 [node name="CollisionShape" type="CollisionShape" parent="Character"]
 shape = SubResource( 7 )
@@ -121,20 +108,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.149982 )
 current = true
 fov = 90.0
 far = 1000.0
-
-[node name="ColorRect" type="ColorRect" parent="Character/Pivot/Camera"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -1.5
-margin_top = -1.5
-margin_right = 1.5
-margin_bottom = 1.5
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Position3D" type="Position3D" parent="Character/Pivot/Camera"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.372802 )
@@ -157,10 +130,10 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.64953, 0.194395 )
 omni_range = 15.0
 
 [node name="Imaginary" type="Spatial" parent="."]
+visible = false
 
 [node name="Particles" type="Particles" parent="Imaginary"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.10421, 0 )
-visible = false
 cast_shadow = 0
 amount = 4000
 lifetime = 40.0
@@ -175,8 +148,21 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0
 mesh = SubResource( 9 )
 material = ExtResource( 2 )
 
+[node name="ColorRect" type="ColorRect" parent="Imaginary"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -1.5
+margin_top = -1.5
+margin_right = 1.5
+margin_bottom = 1.5
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Real" type="Spatial" parent="."]
-visible = false
 
 [node name="MeshInstance" type="MeshInstance" parent="Real"]
 
@@ -193,7 +179,8 @@ transform = Transform( 5.96046e-08, -1, 2.98023e-08, 5.06639e-07, 0, -1, 1, 2.98
 
 [node name="Camera_Orientation" type="Camera" parent="Real/MeshInstance/ward_room/Camera"]
 transform = Transform( 1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0 )
-fov = 61.5551
+current = true
+fov = 66.5
 near = 0.1
 far = 1000.0
 
@@ -204,3 +191,14 @@ omni_attenuation = 2.07053
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( 4 )
+
+[node name="Score" type="RichTextLabel" parent="."]
+margin_left = 11.0
+margin_top = 7.0
+margin_right = 248.0
+margin_bottom = 56.0
+mouse_filter = 1
+text = "Score: 0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
