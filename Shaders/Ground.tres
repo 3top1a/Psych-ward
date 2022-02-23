@@ -1,0 +1,24 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[ext_resource path="res://Shaders/Ground2.gdshader" type="Shader" id=1]
+
+[sub_resource type="OpenSimplexNoise" id=1]
+
+[sub_resource type="NoiseTexture" id=2]
+seamless = true
+noise = SubResource( 1 )
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/albedo = Color( 0.0666667, 0.0666667, 0.0666667, 1 )
+shader_param/specular = 0.5
+shader_param/metallic = 0.0
+shader_param/roughness = 0.8
+shader_param/point_size = 1.0
+shader_param/uv1_scale = Vector3( 20, 20, 5 )
+shader_param/uv1_offset = Vector3( 0, 0, 0 )
+shader_param/uv2_scale = Vector3( 1, 1, 1 )
+shader_param/uv2_offset = Vector3( 0, 0, 0 )
+shader_param/X = 0.0
+shader_param/Y = null
+shader_param/texture_albedo = SubResource( 2 )

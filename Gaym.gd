@@ -6,3 +6,6 @@ func _input(event):
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func on_pill_taken():
+	pass

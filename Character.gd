@@ -35,6 +35,10 @@ func _ready():
 	gun.set_as_toplevel(true)
 
 func _process(delta):
+	## Ground
+	$"../PositionCopy/Ground".material.set_shader_param("X", global_transform.origin.x)
+	$"../PositionCopy/Ground".material.set_shader_param("Y", global_transform.origin.z)
+	
 	## Sway
 	gun.global_transform.origin = hand.global_transform.origin
 	gun.rotation.y = lerp_angle(gun.rotation.y, rotation.y, XSWAY * delta)
@@ -81,24 +85,22 @@ func _physics_process(delta):
 		move_and_slide(Vector3(0, gravity_velocity, 0), Vector3.UP)
 		
 	## Move
-	
 	velocity = velocity.linear_interpolate(direction * speed, ACCELERATION * delta)
 	
 	velocity = move_and_slide_with_snap(velocity, Vector3(0.01,0.01,0.01), Vector3.UP, true)
-	
 	## Ground
 	
 	if transform.origin.y < 0:
 		transform.origin.y = 0
 	
 	## Shoot
-	
 	shoot_timer -= delta
 	
 	if Input.is_action_pressed("fire") and shoot_timer < 0.0:
 		var i = bullet.instance()
 		i.set_as_toplevel(true)
-		i.global_transform.origin = $Pivot/Camera.global_transform.origin
+		i.forward_dir = -$Pivot/Camera/Position3D.global_transform.basis.z
+		i.global_transform.origin = $Pivot/Camera/Position3D.global_transform.origin
 		get_tree().get_root().add_child(i)
 		shoot_timer = SHOOT_TIME
 
