@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://Gaym.gd" type="Script" id=1]
+[ext_resource path="res://Intro.gd" type="Script" id=1]
 [ext_resource path="res://Prefbs/Player.tscn" type="PackedScene" id=2]
 
 [sub_resource type="BoxShape" id=11]
@@ -28,7 +28,7 @@ mesh = SubResource( 12 )
 material/0 = null
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 8.69691, 0 )
+transform = Transform( 0.5, 0.75, 0.433013, 0, -0.5, 0.866025, 0.866025, -0.433013, -0.25, 0, 8.69691, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )

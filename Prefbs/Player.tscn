@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Character.gd" type="Script" id=1]
 [ext_resource path="res://Shaders/Ground.tres" type="Material" id=2]
@@ -19,6 +19,8 @@ emission = Color( 1, 1, 1, 1 )
 emission_energy = 1.0
 emission_operator = 0
 emission_on_uv2 = false
+
+[sub_resource type="BoxShape" id=10]
 
 [sub_resource type="ParticlesMaterial" id=4]
 emission_shape = 2
@@ -93,6 +95,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88125, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.851925, 0 )
 visible = false
 script = ExtResource( 1 )
+DoShoot = false
 BULLET_SPEED = 60.0
 SWAY_LEFT = Vector3( 0, 0.2, 0 )
 SWAY_RIGHT = Vector3( 0, -0.2, 0 )
@@ -128,6 +131,9 @@ material = SubResource( 8 )
 [node name="OmniLight" type="OmniLight" parent="Character/Pivot"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.64953, 0.194395 )
 omni_range = 15.0
+
+[node name="CollisionShape2" type="CollisionShape" parent="Character"]
+shape = SubResource( 10 )
 
 [node name="Imaginary" type="Spatial" parent="."]
 visible = false

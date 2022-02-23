@@ -7,5 +7,5 @@ func _input(event):
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func on_pill_taken():
-	pass
+func on_pill_taken(body):
+	get_tree().change_scene_to(preload("res://Game.tscn"))

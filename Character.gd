@@ -1,6 +1,7 @@
 extends KinematicBody
 
 export var DoJump = false
+export var DoShoot = true
 
 export var speed = 8
 export var mouse_sensitivity = 0.01
@@ -90,20 +91,7 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("jump"):
 			imaginary = !imaginary
 			
-			if imaginary:
-				$"../Imaginary".visible = true
-				$"../Real".visible = false
-				$"../Real/MeshInstance/ward_room/Camera/Camera_Orientation".current = false
-				$"Pivot/Camera".current = true
-				
-				$"../WorldEnvironment".set_environment(imaginary_env)
-			else:
-				$"../Imaginary".visible = false
-				$"../Real".visible = true
-				$"../Real/MeshInstance/ward_room/Camera/Camera_Orientation".current = true
-				$"Pivot/Camera".current = false
-				
-				$"../WorldEnvironment".set_environment(real_env)
+			switch()
 	
 	## Move
 	velocity = velocity.linear_interpolate(direction * speed, ACCELERATION * delta)
@@ -117,12 +105,13 @@ func _physics_process(delta):
 	## Shoot
 	shoot_timer -= delta
 	
-	if Input.is_action_pressed("fire") and shoot_timer < 0.0 and imaginary:
+	if Input.is_action_pressed("fire") and shoot_timer < 0.0 and imaginary and DoShoot:
 		var i = bullet.instance()
 		i.set_as_toplevel(true)
-		i.apply_impulse($Pivot/Camera/Position3D.transform.basis.z, -$Pivot/Camera.transform.basis.z * BULLET_SPEED)
+#		i.apply_impulse($Pivot/Camera/Position3D.transform.basis.z, -$Pivot/Camera.transform.basis.z * BULLET_SPEED)
+#		i.velocity = -i.transform.basis.z * BULLET_SPEED
+		i.apply_impulse(i.transform.basis.z, -$Pivot/Camera.global_transform.basis.z * BULLET_SPEED) 
 		i.global_transform.origin = $Pivot/Camera/Position3D.global_transform.origin
-		i.global_transform.basis.z = $Pivot/Camera.global_transform.basis.z
 		get_tree().get_root().add_child(i)
 		shoot_timer = SHOOT_TIME
 
@@ -132,3 +121,19 @@ func _unhandled_input(event):
 		$Pivot.rotate_x(-event.relative.y * mouse_sensitivity)
 		$Pivot.rotation.x = clamp($Pivot.rotation.x, -1.2, 1.2)
 		mouse_mov.x = -event.relative.x
+
+func switch():
+	if imaginary:
+		$"../Imaginary".visible = true
+		$"../Real".visible = false
+		$"../Real/MeshInstance/ward_room/Camera/Camera_Orientation".current = false
+		$"Pivot/Camera".current = true
+		
+		$"../WorldEnvironment".set_environment(imaginary_env)
+	else:
+		$"../Imaginary".visible = false
+		$"../Real".visible = true
+		$"../Real/MeshInstance/ward_room/Camera/Camera_Orientation".current = true
+		$"Pivot/Camera".current = false
+		
+		$"../WorldEnvironment".set_environment(real_env)
