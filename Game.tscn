@@ -3,20 +3,22 @@
 [ext_resource path="res://Prefbs/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Game.gd" type="Script" id=2]
 [ext_resource path="res://Spawner.gd" type="Script" id=3]
-[ext_resource path="res://Prefbs/SkullHead.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Curve" id=1]
+min_value = 1.0
+max_value = 20.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 20 ), 26.6, 0.0, 0, 0 ]
 
 [node name="Game" type="Spatial"]
 script = ExtResource( 2 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 0.5, 0.75, 0.433013, 0, -0.5, 0.866025, 0.866025, -0.433013, -0.25, 0, 8.69691, 0 )
+transform = Transform( 1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 8.69691, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
 
 [node name="Spawner" type="Spatial" parent="."]
 script = ExtResource( 3 )
-
-[node name="SkullHead" parent="Spawner" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 2, 0 )
-mode = 3
+skulls = SubResource( 1 )
+skull_amount = 5.0

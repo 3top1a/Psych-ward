@@ -128,6 +128,8 @@ func switch():
 		$"../Real".visible = false
 		$"../Real/MeshInstance/ward_room/Camera/Camera_Orientation".current = false
 		$"Pivot/Camera".current = true
+		$"../Imaginary/CanvasLayer".scale = Vector2(1,1)
+		$"../Real/CanvasLayer".scale = Vector2(0,0)
 		
 		$"../WorldEnvironment".set_environment(imaginary_env)
 	else:
@@ -135,5 +137,11 @@ func switch():
 		$"../Real".visible = true
 		$"../Real/MeshInstance/ward_room/Camera/Camera_Orientation".current = true
 		$"Pivot/Camera".current = false
+		$"../Imaginary/CanvasLayer".scale = Vector2(0,0)
+		$"../Real/CanvasLayer".scale = Vector2(1,1)
 		
 		$"../WorldEnvironment".set_environment(real_env)
+
+func _on_Area_body_entered(body):
+	if body.has_method("damage"):
+		get_tree().reload_current_scene()

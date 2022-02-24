@@ -1,15 +1,11 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Character.gd" type="Script" id=1]
 [ext_resource path="res://Shaders/Ground.tres" type="Material" id=2]
 [ext_resource path="res://Models/Material_001.material" type="Material" id=3]
-[ext_resource path="res://Imaginary.tres" type="Environment" id=4]
+[ext_resource path="res://Real.tres" type="Environment" id=4]
 [ext_resource path="res://Models/Room.material" type="Material" id=5]
 [ext_resource path="res://Models/Floor.material" type="Material" id=6]
-
-[sub_resource type="CylinderShape" id=7]
-radius = 0.39
-height = 1.7
 
 [sub_resource type="SpatialMaterial" id=8]
 render_priority = 5
@@ -21,6 +17,10 @@ emission_operator = 0
 emission_on_uv2 = false
 
 [sub_resource type="BoxShape" id=10]
+
+[sub_resource type="CylinderShape" id=7]
+radius = 0.39
+height = 1.7
 
 [sub_resource type="ParticlesMaterial" id=4]
 emission_shape = 2
@@ -88,6 +88,67 @@ surfaces/2 = {
 "vertex_count": 4
 }
 
+[sub_resource type="Shader" id=12]
+code = "/*========================================================
+°                    ChromaticAberration.
+°                   ======================
+°
+°   Category: Shaders.
+°   -----------------------------------------------------
+°   Description:
+°        Simple Chromatic Aberration.
+°   -----------------------------------------------------
+°   Copyright:
+°               J. Cuellar 2021. MIT License.
+°                   See: LICENSE File.
+========================================================*/
+shader_type canvas_item;
+
+uniform float _amount: hint_range(0.0, 5.0) = 0.55;
+uniform float _centerFade: hint_range(0.0, 1.0) = 0.154;
+uniform vec2 _aberrationCenter = vec2(0.5, 0.5);
+
+void fragment(){
+	vec2 coords = UV - _aberrationCenter;
+	float amount = _amount * 0.01 * mix(dot(coords, coords), 1.0, _centerFade) * ((4.0+cos(TIME * 3.0))/5.0) * 10.0;
+	
+	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV);
+	color.r = texture(SCREEN_TEXTURE, vec2(SCREEN_UV.x + amount, SCREEN_UV.y)).r;
+	color.b = texture(SCREEN_TEXTURE, vec2(SCREEN_UV.x - amount, SCREEN_UV.y)).b;
+	
+	COLOR = color; 
+}"
+
+[sub_resource type="ShaderMaterial" id=11]
+shader = SubResource( 12 )
+shader_param/_amount = 0.756
+shader_param/_centerFade = 0.018
+shader_param/_aberrationCenter = Vector2( 0.5, 0.5 )
+
+[sub_resource type="Shader" id=13]
+code = "shader_type canvas_item;
+uniform vec2 player_position;
+uniform vec4 color : hint_color = vec4(0.305, 0.298, 0.341,1);
+
+uniform float MULTIPLIER = 0.56;
+uniform float SCALE = 0.5;
+uniform float SOFTNESS = 0.45;
+
+void fragment(){
+	float val = distance(vec2(UV.x , UV.y * MULTIPLIER), vec2(player_position.x , player_position.y * MULTIPLIER));
+	val = val / SCALE;
+	float vignette = smoothstep(0.2, SOFTNESS + cos(TIME * 3.0) / 15.0, val);
+	COLOR = vec4(color.rgb , vignette );
+}"
+
+[sub_resource type="ShaderMaterial" id=14]
+shader = SubResource( 13 )
+shader_param/player_position = Vector2( 0.5, 0.593 )
+shader_param/color = Color( 0, 0, 0, 1 )
+shader_param/MULTIPLIER = 0.814
+shader_param/SCALE = 0.959
+shader_param/SOFTNESS = 0.866
+
 [node name="Player" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88125, 0 )
 
@@ -102,9 +163,6 @@ BULLET_SPEED = 100.0
 SWAY_LEFT = Vector3( 0, 0.2, 0 )
 SWAY_RIGHT = Vector3( 0, -0.2, 0 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Character"]
-shape = SubResource( 7 )
-
 [node name="Pivot" type="Spatial" parent="Character"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64953, -0.194395 )
 
@@ -116,6 +174,11 @@ far = 1000.0
 
 [node name="Position3D" type="Position3D" parent="Character/Pivot/Camera"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.372802 )
+
+[node name="RayCast" type="RayCast" parent="Character/Pivot/Camera"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.061519 )
+enabled = true
+cast_to = Vector3( 0, 0, -1000 )
 
 [node name="GunTween" type="Spatial" parent="Character/Pivot"]
 
@@ -137,8 +200,12 @@ omni_range = 15.0
 [node name="CollisionShape2" type="CollisionShape" parent="Character"]
 shape = SubResource( 10 )
 
+[node name="Area" type="Area" parent="Character"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Character/Area"]
+shape = SubResource( 7 )
+
 [node name="Imaginary" type="Spatial" parent="."]
-visible = false
 
 [node name="Particles" type="Particles" parent="Imaginary"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.10421, 0 )
@@ -157,7 +224,9 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0
 mesh = SubResource( 9 )
 material = ExtResource( 2 )
 
-[node name="ColorRect" type="ColorRect" parent="Imaginary"]
+[node name="CanvasLayer" type="CanvasLayer" parent="Imaginary"]
+
+[node name="ColorRect" type="ColorRect" parent="Imaginary/CanvasLayer"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -172,6 +241,7 @@ __meta__ = {
 }
 
 [node name="Real" type="Spatial" parent="."]
+visible = false
 
 [node name="MeshInstance" type="MeshInstance" parent="Real"]
 
@@ -198,6 +268,26 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 omni_range = 6.231
 omni_attenuation = 2.07053
 
+[node name="CanvasLayer" type="CanvasLayer" parent="Real"]
+
+[node name="Chrom" type="ColorRect" parent="Real/CanvasLayer"]
+material = SubResource( 11 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+color = Color( 1, 0.0745098, 0.0745098, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Vignette" type="ColorRect" parent="Real/CanvasLayer"]
+material = SubResource( 14 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( 4 )
 
@@ -211,3 +301,15 @@ text = "Score: 0"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="area_entered" from="Character/Area" to="Character" method="_on_Area_area_entered"]
+[connection signal="body_entered" from="Character/Area" to="Character" method="_on_Area_body_entered"]

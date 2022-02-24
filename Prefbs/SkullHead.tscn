@@ -4,7 +4,8 @@
 [ext_resource path="res://Models/Material_001.material" type="Material" id=2]
 
 [sub_resource type="Curve" id=3]
-_data = [ Vector2( 0, 0 ), 0.0, -0.0322347, 0, 0, Vector2( 0.159677, 0.230061 ), 2.85276, 2.85276, 0, 0, Vector2( 1, 1 ), 0.108395, 0.0, 0, 0 ]
+bake_resolution = 60
+_data = [ Vector2( 0, 0 ), 0.0, -0.0322347, 0, 0, Vector2( 0.282258, 0.328221 ), 2.85276, 2.85276, 0, 0, Vector2( 1, 1 ), 0.108395, 0.0, 0, 0 ]
 
 [sub_resource type="SphereMesh" id=2]
 
@@ -35,6 +36,7 @@ data = PoolVector3Array( 0.3817, -0.3381, 0.3579, 0.4367, -0.412, 0.6288, 0.5176
 mode = 1
 continuous_cd = true
 script = ExtResource( 1 )
+speed = 10.0
 yCurve = SubResource( 3 )
 yHeight = 20.0
 yDist = 100.0
