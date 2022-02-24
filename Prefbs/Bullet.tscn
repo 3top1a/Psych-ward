@@ -47,7 +47,7 @@ void fragment() {
 	ROUGHNESS = roughness;
 	SPECULAR = specular;
 	vec3 emission_tex = texture(texture_emission,base_uv).rgb;
-	EMISSION = (emission.rgb*emission_tex)*emission_energy;
+	EMISSION = (((emission.rgb*emission_tex)*emission_energy) - 0.5) * 20.0;
 }
 "
 
@@ -58,8 +58,8 @@ persistence = 1.0
 lacunarity = 4.0
 
 [sub_resource type="NoiseTexture" id=8]
-width = 258
-height = 258
+width = 128
+height = 128
 seamless = true
 noise = SubResource( 7 )
 
@@ -71,7 +71,7 @@ shader_param/metallic = 1.0
 shader_param/roughness = 0.89
 shader_param/point_size = 1.0
 shader_param/emission = Color( 1, 0, 0, 1 )
-shader_param/emission_energy = 1.0
+shader_param/emission_energy = 1.149
 shader_param/uv1_scale = Vector3( 1, 1, 1 )
 shader_param/uv1_offset = Vector3( 0, 0, 0 )
 shader_param/uv2_scale = Vector3( 1, 1, 1 )

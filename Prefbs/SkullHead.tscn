@@ -33,6 +33,7 @@ data = PoolVector3Array( 0.3817, -0.3381, 0.3579, 0.4367, -0.412, 0.6288, 0.5176
 
 [node name="SkullHead" type="RigidBody"]
 mode = 1
+continuous_cd = true
 script = ExtResource( 1 )
 yCurve = SubResource( 3 )
 yHeight = 20.0
