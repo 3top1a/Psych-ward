@@ -91,6 +91,8 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("jump"):
 			imaginary = !imaginary
 			
+			$"../CanvasLayer/ColorRect/AnimationPlayer".play("Blink")
+			
 			switch()
 	
 	## Move
@@ -132,6 +134,8 @@ func switch():
 		$"../Real/CanvasLayer".scale = Vector2(0,0)
 		
 		$"../WorldEnvironment".set_environment(imaginary_env)
+		
+		$"../Real/breathing".playing = false
 	else:
 		$"../Imaginary".visible = false
 		$"../Real".visible = true
@@ -141,7 +145,10 @@ func switch():
 		$"../Real/CanvasLayer".scale = Vector2(1,1)
 		
 		$"../WorldEnvironment".set_environment(real_env)
+		
+		$"../Real/breathing".playing = true
+		
 
 func _on_Area_body_entered(body):
-	if body.has_method("damage"):
+	if body.has_method("damage") and imaginary:
 		get_tree().reload_current_scene()

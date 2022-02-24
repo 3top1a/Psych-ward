@@ -17,7 +17,7 @@ func _process(delta):
 	if skull_timer > skull_time:
 		skull_timer = 0
 		
-		for x in range( int(skull_amount * skulls.interpolate(time / 1000)) ):
+		for _x in range( int(skull_amount * skulls.interpolate(time / 1000)) ):
 			var i = skull_pre.instance()
 			i.global_transform.origin = $"../Player/Character".global_transform.origin + (Vector3.FORWARD * skull_dist).rotated(Vector3.UP, rand_range(0, 360))
 			

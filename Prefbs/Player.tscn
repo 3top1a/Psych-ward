@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Character.gd" type="Script" id=1]
 [ext_resource path="res://Shaders/Ground.tres" type="Material" id=2]
@@ -6,6 +6,9 @@
 [ext_resource path="res://Real.tres" type="Environment" id=4]
 [ext_resource path="res://Models/Room.material" type="Material" id=5]
 [ext_resource path="res://Models/Floor.material" type="Material" id=6]
+[ext_resource path="res://Audio/486092_breathing.ogg" type="AudioStream" id=7]
+[ext_resource path="res://Audio/521777__machine.ogg" type="AudioStream" id=8]
+[ext_resource path="res://Blink.gd" type="Script" id=10]
 
 [sub_resource type="SpatialMaterial" id=8]
 render_priority = 5
@@ -167,11 +170,48 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id=16]
 shader = SubResource( 15 )
-shader_param/player_position = Vector2( 0.5, 0.5 )
+shader_param/player_position = Vector2( 0, 0.5 )
 shader_param/color = Color( 0, 0, 0, 1 )
-shader_param/MULTIPLIER = 5.5
-shader_param/SCALE = 0.6
-shader_param/SOFTNESS = 1.3
+shader_param/MULTIPLIER = 20.386
+shader_param/SCALE = 15.0
+shader_param/SOFTNESS = 1.382
+
+[sub_resource type="Animation" id=17]
+resource_name = "Blink"
+length = 0.2
+step = 0.0333333
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.0333333, 0.0666667, 0.1, 0.133333, 0.166667, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"values": [ {
+"args": [ 100.0 ],
+"method": "set_scale"
+}, {
+"args": [ 15.0 ],
+"method": "set_scale"
+}, {
+"args": [ 10.0 ],
+"method": "set_scale"
+}, {
+"args": [ 0.0 ],
+"method": "set_scale"
+}, {
+"args": [ 10.0 ],
+"method": "set_scale"
+}, {
+"args": [ 15.0 ],
+"method": "set_scale"
+}, {
+"args": [ 100.0 ],
+"method": "set_scale"
+} ]
+}
 
 [node name="Player" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88125, 0 )
@@ -251,6 +291,7 @@ material = ExtResource( 2 )
 [node name="CanvasLayer" type="CanvasLayer" parent="Imaginary"]
 
 [node name="ColorRect" type="ColorRect" parent="Imaginary/CanvasLayer"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -264,8 +305,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="north" type="AudioStreamPlayer3D" parent="Imaginary"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 13, -29 )
+stream = ExtResource( 8 )
+unit_db = -5.0
+autoplay = true
+emission_angle_enabled = true
+emission_angle_degrees = 20.0
+
 [node name="Real" type="Spatial" parent="."]
-visible = false
 
 [node name="MeshInstance" type="MeshInstance" parent="Real"]
 
@@ -295,6 +343,7 @@ omni_attenuation = 2.07053
 [node name="CanvasLayer" type="CanvasLayer" parent="Real"]
 
 [node name="Chrom" type="ColorRect" parent="Real/CanvasLayer"]
+visible = false
 material = SubResource( 11 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -305,12 +354,20 @@ __meta__ = {
 }
 
 [node name="Vignette" type="ColorRect" parent="Real/CanvasLayer"]
+visible = false
 material = SubResource( 14 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="breathing" type="AudioStreamPlayer3D" parent="Real"]
+transform = Transform( 5.96046e-08, -2.98023e-08, -1, 5.06639e-07, 1, -2.98023e-08, 1, -5.06639e-07, 5.96046e-08, -2.25089, 0.912551, 0 )
+stream = ExtResource( 7 )
+autoplay = true
+emission_angle_enabled = true
+doppler_tracking = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( 4 )
@@ -332,9 +389,14 @@ __meta__ = {
 material = SubResource( 16 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/ColorRect"]
+anims/Blink = SubResource( 17 )
 
 [connection signal="area_entered" from="Character/Area" to="Character" method="_on_Area_area_entered"]
 [connection signal="body_entered" from="Character/Area" to="Character" method="_on_Area_body_entered"]

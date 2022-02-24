@@ -9,5 +9,5 @@ func _ready():
 	$Player/Character.imaginary = false
 	$Player/Character.switch()
 
-func on_pill_taken(body):
+func on_pill_taken(_body):
 	get_tree().change_scene_to(preload("res://Game.tscn"))

@@ -10,7 +10,7 @@ export(float) var yDist = 75.0
 
 var target_position
 
-func _process(delta):
+func _process(_delta):
 	if !target_position:
 		target_position = get_tree().get_root().get_node("Game/Player/Character/Pivot/Camera").global_transform
 	
