@@ -6,7 +6,7 @@ export var skull_pre = preload("res://Prefbs/SkullHead.tscn")
 export (float) var skull_time = 10.0
 export (float) var skull_dist = 80
 export (float) var skull_amount = 10
-var skull_timer = 0.0
+var skull_timer = skull_time
 
 var time = 0.0
 

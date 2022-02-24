@@ -12,6 +12,8 @@ export var GRAVITY = 15.0
 export var JUMP = 8.0
 export var BULLET_SPEED = 20.0
 export var SHOOT_TIME = .12
+export var SPHREAD = .2
+export (Array, NodePath) var SHOTGUN_RAYS
 
 export var XSWAY = 20.0
 export var YSWAY = 10.0
@@ -37,6 +39,7 @@ export onready var real_env = preload("res://Real.tres")
 
 func _ready():
 	gun.set_as_toplevel(true)
+	randomize()
 
 func _process(delta):
 	## Ground
@@ -107,14 +110,38 @@ func _physics_process(delta):
 	## Shoot
 	shoot_timer -= delta
 	
+	if Input.is_action_just_pressed("fire") and shoot_timer < 0.0 and imaginary and DoShoot:
+		for r in SHOTGUN_RAYS:
+			var i = bullet.instance()
+			i.set_as_toplevel(true)
+			i.apply_impulse(i.global_transform.basis.z, get_node(r).global_transform.basis.z * BULLET_SPEED) 
+			get_tree().get_root().add_child(i)
+			i.global_transform.origin = get_node(r).global_transform.origin
+			
+			get_node(r).cast_to.x = rand_range(SPHREAD, -SPHREAD)
+			get_node(r).cast_to.y = rand_range(SPHREAD, -SPHREAD)
+			if get_node(r).get_collider():
+				var target = get_node(r).get_collider()
+				if target.has_method("damage"):
+					target.damage()
+		shoot_timer = SHOOT_TIME
+	
 	if Input.is_action_pressed("fire") and shoot_timer < 0.0 and imaginary and DoShoot:
 		var i = bullet.instance()
 		i.set_as_toplevel(true)
 #		i.apply_impulse($Pivot/Camera/Position3D.transform.basis.z, -$Pivot/Camera.transform.basis.z * BULLET_SPEED)
 #		i.velocity = -i.transform.basis.z * BULLET_SPEED
 		i.apply_impulse(i.transform.basis.z, -$Pivot/Camera.global_transform.basis.z * BULLET_SPEED) 
-		i.global_transform.origin = $Pivot/Camera/Position3D.global_transform.origin
 		get_tree().get_root().add_child(i)
+		i.global_transform.origin = $Pivot/Camera/Position3D.global_transform.origin
+		if $Pivot/Camera/RayCast.is_colliding():
+			var bullet = get_world().direct_space_state
+			var collision = bullet.intersect_ray( $Pivot/Camera.global_transform.origin, $Pivot/Camera/RayCast.get_collision_point())
+			
+			if collision:
+				var target = collision.collider
+				if target.has_method("damage"):
+					target.damage()
 		shoot_timer = SHOOT_TIME
 
 func _unhandled_input(event):
@@ -136,6 +163,7 @@ func switch():
 		$"../WorldEnvironment".set_environment(imaginary_env)
 		
 		$"../Real/breathing".playing = false
+		$"../Imaginary/north".playing = true
 	else:
 		$"../Imaginary".visible = false
 		$"../Real".visible = true
@@ -147,7 +175,7 @@ func switch():
 		$"../WorldEnvironment".set_environment(real_env)
 		
 		$"../Real/breathing".playing = true
-		
+		$"../Imaginary/north".playing = false
 
 func _on_Area_body_entered(body):
 	if body.has_method("damage") and imaginary:

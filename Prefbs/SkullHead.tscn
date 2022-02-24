@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://SkullHead.gd" type="Script" id=1]
 [ext_resource path="res://Models/Material_001.material" type="Material" id=2]
+[ext_resource path="res://Audio/521777__machine_high.ogg" type="AudioStream" id=3]
 
 [sub_resource type="Curve" id=3]
 bake_resolution = 60
@@ -36,10 +37,8 @@ data = PoolVector3Array( 0.3817, -0.3381, 0.3579, 0.4367, -0.412, 0.6288, 0.5176
 mode = 1
 continuous_cd = true
 script = ExtResource( 1 )
-speed = 10.0
+rot_speed = 3.0
 yCurve = SubResource( 3 )
-yHeight = 20.0
-yDist = 100.0
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 visible = false
@@ -47,6 +46,7 @@ mesh = SubResource( 2 )
 material/0 = null
 
 [node name="GFX" type="Spatial" parent="."]
+transform = Transform( 0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0 )
 
 [node name="skullhead" type="Spatial" parent="GFX"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
@@ -55,6 +55,20 @@ transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0
 mesh = SubResource( 1 )
 material/0 = SubResource( 4 )
 
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="GFX/skullhead/Icosphere"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.07337e-07, 0.373832, 1.2278 )
+stream = ExtResource( 3 )
+unit_db = -20.0
+autoplay = true
+emission_angle_enabled = true
+emission_angle_degrees = 75.0
+
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+transform = Transform( -0.8, 0, -1.20797e-07, 0, 0.8, 0, 1.20797e-07, 0, -0.8, 0, 0, 0 )
 shape = SubResource( 5 )
+
+[node name="OmniLight" type="OmniLight" parent="CollisionShape"]
+transform = Transform( -1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.15364e-07, 0.682345, 1.31961 )
+light_energy = 5.0
+shadow_enabled = true
+omni_range = 2.191

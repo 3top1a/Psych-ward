@@ -79,6 +79,7 @@ shader_param/uv2_offset = Vector3( 0, 0, 0 )
 shader_param/texture_emission = SubResource( 8 )
 
 [node name="Bullet" type="RigidBody"]
+gravity_scale = 4.0
 continuous_cd = true
 contacts_reported = 2
 contact_monitor = true

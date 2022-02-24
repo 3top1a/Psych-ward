@@ -12,7 +12,12 @@ config_version=4
 
 config/name="SymplE"
 run/main_scene="res://Intro.tscn"
+boot_splash/bg_color=Color( 1, 0, 0, 1 )
 config/icon="res://icon.png"
+
+[audio]
+
+mix_rate=48000
 
 [display]
 
@@ -61,6 +66,7 @@ common/enable_pause_aware_picking=true
 
 threads/thread_model=2
 threads/thread_safe_bvh=true
-quality/filters/msaa=2
+quality/filters/anisotropic_filter_level=16
+quality/filters/msaa=4
 quality/filters/use_fxaa=true
 environment/default_environment="res://default_env.tres"

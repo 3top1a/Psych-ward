@@ -20,7 +20,7 @@ void vertex() {
 }
 
 void fragment() {
-	vec2 base_uv = UV + (vec2(X / 100.0, Y / 100.0));
+	vec2 base_uv = UV + (vec2(X / uv1_scale.x, Y / uv1_scale.y));
 	vec4 albedo_tex = texture(texture_albedo,base_uv);
 	ALBEDO = albedo.rgb * albedo_tex.rgb;
 //	EMISSION = albedo.rgb * albedo_tex.rgb;
