@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/ward_room.glb-641f917f9d8a22309716d9ef5eb9ea53.scn"
+path="res://.import/skullhead.glb-f35cbd2f3f5da995838354013a0874a3.scn"
 
 [deps]
 
-source_file="res://Models/ward_room.glb"
-dest_files=[ "res://.import/ward_room.glb-641f917f9d8a22309716d9ef5eb9ea53.scn" ]
+source_file="res://Models/skullhead.glb"
+dest_files=[ "res://.import/skullhead.glb-f35cbd2f3f5da995838354013a0874a3.scn" ]
 
 [params]
 
@@ -16,10 +16,10 @@ nodes/root_name="Scene Root"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0
-nodes/use_legacy_names=true
-materials/location=0
-materials/storage=0
-materials/keep_on_reimport=false
+nodes/use_legacy_names=false
+materials/location=1
+materials/storage=1
+materials/keep_on_reimport=true
 meshes/octahedral_compression=true
 meshes/compress=4286
 meshes/ensure_tangents=true

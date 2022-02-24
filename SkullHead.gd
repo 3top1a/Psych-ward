@@ -1,16 +1,24 @@
 extends RigidBody
 
-export var speed = 30
-export var rot_speed = 2
+export var speed = 25.0
+export var rot_speed = 3.5
 
 export(Curve) var yCurve
 export(float) var yHeight = 5
 export(float) var yBaseHeight = 1.5
-export(float) var yDist = 50
+export(float) var yDist = 75.0
+
+var target_position
+
+func _process(delta):
+	if !target_position:
+		target_position = get_tree().get_root().get_node("Game/Player/Character/Pivot/Camera").global_transform
+	
+	$GFX.look_at(linear_velocity, Vector3.UP)
+	pass
 
 func _physics_process(delta):
-	var target_position = get_tree().get_root().get_node("Game/Player/Character/Pivot/Camera").global_transform
-#
+	target_position = get_tree().get_root().get_node("Game/Player/Character/Pivot/Camera").global_transform
 #	global_translate(
 #		global_transform.origin.direction_to(get_tree().get_root().get_node("Game/Player/Character").global_transform.origin)
 #		* speed * delta)
@@ -28,7 +36,10 @@ func _physics_process(delta):
 	global_translate(-global_transform.basis.z * speed * delta)
 	
 	var yI = target_position.origin.distance_to(global_transform.origin)
-	transform.origin.y = yBaseHeight + yCurve.interpolate( min(yI / yDist, 1.0) ) * yHeight
+	transform.origin.y = yBaseHeight + (yCurve.interpolate( min(yI / yDist, 1.0) ) * yHeight)
 	
 	if global_transform.origin.y < 0.0:
 		queue_free()
+
+func damage():
+	queue_free()

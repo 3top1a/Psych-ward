@@ -98,7 +98,7 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource( 1 )
 DoShoot = false
-BULLET_SPEED = 60.0
+BULLET_SPEED = 100.0
 SWAY_LEFT = Vector3( 0, 0.2, 0 )
 SWAY_RIGHT = Vector3( 0, -0.2, 0 )
 
@@ -142,6 +142,7 @@ visible = false
 
 [node name="Particles" type="Particles" parent="Imaginary"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.10421, 0 )
+visible = false
 cast_shadow = 0
 amount = 4000
 lifetime = 40.0
