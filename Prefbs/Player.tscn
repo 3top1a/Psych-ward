@@ -229,6 +229,7 @@ script = ExtResource( 1 )
 DoShoot = false
 BULLET_SPEED = 200.0
 SHOOT_TIME = 0.1
+SPHREAD = 60.0
 SHOTGUN_RAYS = [ NodePath("Pivot/Camera/Shutgun/RayCast"), NodePath("Pivot/Camera/Shutgun/RayCast2"), NodePath("Pivot/Camera/Shutgun/RayCast3"), NodePath("Pivot/Camera/Shutgun/RayCast4"), NodePath("Pivot/Camera/Shutgun/RayCast5"), NodePath("Pivot/Camera/Shutgun/RayCast6"), NodePath("Pivot/Camera/Shutgun/RayCast7"), NodePath("Pivot/Camera/Shutgun/RayCast8"), NodePath("Pivot/Camera/Shutgun/RayCast9"), NodePath("Pivot/Camera/Shutgun/RayCast10"), NodePath("Pivot/Camera/Shutgun/RayCast11"), NodePath("Pivot/Camera/Shutgun/RayCast12"), NodePath("Pivot/Camera/Shutgun/RayCast13"), NodePath("Pivot/Camera/Shutgun/RayCast14"), NodePath("Pivot/Camera/Shutgun/RayCast15") ]
 SWAY_LEFT = Vector3( 0, 0.2, 0 )
 SWAY_RIGHT = Vector3( 0, -0.2, 0 )
@@ -356,6 +357,7 @@ shape = SubResource( 7 )
 
 [node name="Particles" type="Particles" parent="Imaginary"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.10421, 0 )
+visible = false
 cast_shadow = 0
 amount = 4000
 lifetime = 40.0

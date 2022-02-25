@@ -114,7 +114,7 @@ func _physics_process(delta):
 		for r in SHOTGUN_RAYS:
 			var i = bullet.instance()
 			i.set_as_toplevel(true)
-			i.apply_impulse(i.global_transform.basis.z, get_node(r).global_transform.basis.z * BULLET_SPEED) 
+			i.apply_central_impulse(-get_node(r).global_transform.basis.z * BULLET_SPEED) 
 			get_tree().get_root().add_child(i)
 			i.global_transform.origin = get_node(r).global_transform.origin
 			
@@ -164,6 +164,7 @@ func switch():
 		
 		$"../Real/breathing".playing = false
 		$"../Imaginary/north".playing = true
+		visible = true
 	else:
 		$"../Imaginary".visible = false
 		$"../Real".visible = true
@@ -176,6 +177,8 @@ func switch():
 		
 		$"../Real/breathing".playing = true
 		$"../Imaginary/north".playing = false
+		visible = false
+
 
 func _on_Area_body_entered(body):
 	if body.has_method("damage") and imaginary:

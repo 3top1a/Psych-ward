@@ -14,8 +14,8 @@ func _process(_delta):
 	if !target_position:
 		target_position = get_tree().get_root().get_node("Game/Player/Character/Pivot/Camera").global_transform
 	
-	$GFX.look_at(transform.origin + linear_velocity + (Vector3.FORWARD * 0.1),Vector3.UP)
-	$CollisionShape.look_at(transform.origin + linear_velocity + (Vector3.FORWARD * 0.1),Vector3.UP)
+	$GFX.look_at(transform.origin + linear_velocity + (Vector3.UP * 0.1),Vector3.UP)
+	$CollisionShape.look_at(transform.origin + linear_velocity + (Vector3.UP * 0.1),Vector3.UP)
 	pass
 
 func _physics_process(delta):

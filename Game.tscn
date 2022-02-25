@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Prefbs/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Game.gd" type="Script" id=2]
@@ -7,7 +7,12 @@
 [sub_resource type="Curve" id=1]
 min_value = 1.0
 max_value = 20.0
-_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 20 ), 26.6, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 1 ), 0.0, 5.0988, 0, 0, Vector2( 0.437097, 12.5982 ), 19.816, 19.816, 0, 0, Vector2( 1, 20 ), 2.35198, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=2]
+min_value = 1.0
+max_value = 20.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.579032, 7.93558 ), 25.2945, 25.2945, 0, 0, Vector2( 1, 20 ), 1.4, 0.0, 0, 0 ]
 
 [node name="Game" type="Spatial"]
 script = ExtResource( 2 )
@@ -21,4 +26,5 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
 [node name="Spawner" type="Spatial" parent="."]
 script = ExtResource( 3 )
 skulls = SubResource( 1 )
-skull_amount = 5.0
+heads = SubResource( 2 )
+head_amount = 1.0
