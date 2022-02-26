@@ -8,11 +8,21 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Resource",
+"class": "skore_a",
+"language": "GDScript",
+"path": "res://savedata.gd"
+} ]
+_global_script_class_icons={
+"skore_a": ""
+}
+
 [application]
 
 config/name="SymplE"
 run/main_scene="res://Intro.tscn"
-boot_splash/bg_color=Color( 1, 0, 0, 1 )
+boot_splash/bg_color=Color( 0.0627451, 0.0627451, 0.0627451, 1 )
 config/icon="res://icon.png"
 
 [audio]

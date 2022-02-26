@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://Character.gd" type="Script" id=1]
 [ext_resource path="res://Shaders/Ground.tres" type="Material" id=2]
@@ -10,6 +10,9 @@
 [ext_resource path="res://Audio/521777__machine_.ogg" type="AudioStream" id=8]
 [ext_resource path="res://Camera_Orientation.gd" type="Script" id=9]
 [ext_resource path="res://Blink.gd" type="Script" id=10]
+[ext_resource path="res://Chomsky.otf" type="DynamicFontData" id=11]
+[ext_resource path="res://Theme.tres" type="Theme" id=12]
+[ext_resource path="res://Textures/image.psd(3)(1).png" type="Texture" id=13]
 
 [sub_resource type="SpatialMaterial" id=8]
 render_priority = 5
@@ -218,6 +221,10 @@ tracks/0/keys = {
 } ]
 }
 
+[sub_resource type="DynamicFont" id=20]
+size = 41
+font_data = ExtResource( 11 )
+
 [node name="Player" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88125, 0 )
 
@@ -227,9 +234,6 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource( 1 )
 DoShoot = false
-BULLET_SPEED = 200.0
-SHOOT_TIME = 0.1
-SPHREAD = 60.0
 SHOTGUN_RAYS = [ NodePath("Pivot/Camera/Shutgun/RayCast"), NodePath("Pivot/Camera/Shutgun/RayCast2"), NodePath("Pivot/Camera/Shutgun/RayCast3"), NodePath("Pivot/Camera/Shutgun/RayCast4"), NodePath("Pivot/Camera/Shutgun/RayCast5"), NodePath("Pivot/Camera/Shutgun/RayCast6"), NodePath("Pivot/Camera/Shutgun/RayCast7"), NodePath("Pivot/Camera/Shutgun/RayCast8"), NodePath("Pivot/Camera/Shutgun/RayCast9"), NodePath("Pivot/Camera/Shutgun/RayCast10"), NodePath("Pivot/Camera/Shutgun/RayCast11"), NodePath("Pivot/Camera/Shutgun/RayCast12"), NodePath("Pivot/Camera/Shutgun/RayCast13"), NodePath("Pivot/Camera/Shutgun/RayCast14"), NodePath("Pivot/Camera/Shutgun/RayCast15") ]
 SWAY_LEFT = Vector3( 0, 0.2, 0 )
 SWAY_RIGHT = Vector3( 0, -0.2, 0 )
@@ -336,10 +340,15 @@ cast_to = Vector3( 0, 0, -1000 )
 
 [node name="CSGBox" type="CSGBox" parent="Character/Pivot/GunTween/Gun pivot/SwayHolder"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.384, -0.611695 )
+visible = false
 width = 0.129085
 height = 0.103797
 depth = 0.640911
 material = SubResource( 8 )
+
+[node name="Sprite3D" type="Sprite3D" parent="Character/Pivot/GunTween/Gun pivot/SwayHolder"]
+transform = Transform( 0.6, 0, 0, 0, -2.62268e-08, 0.6, 0, -0.6, -2.62268e-08, 0, -0.412497, -0.461882 )
+texture = ExtResource( 13 )
 
 [node name="OmniLight" type="OmniLight" parent="Character/Pivot"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.64953, 0.194395 )
@@ -354,6 +363,7 @@ shape = SubResource( 7 )
 shape = SubResource( 7 )
 
 [node name="Imaginary" type="Spatial" parent="."]
+visible = false
 
 [node name="Particles" type="Particles" parent="Imaginary"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.10421, 0 )
@@ -397,7 +407,6 @@ emission_angle_enabled = true
 emission_angle_degrees = 20.0
 
 [node name="Real" type="Spatial" parent="."]
-visible = false
 
 [node name="MeshInstance" type="MeshInstance" parent="Real"]
 
@@ -416,9 +425,12 @@ transform = Transform( 5.96046e-08, -1, 2.98023e-08, 5.06639e-07, 0, -1, 1, 2.98
 repeat = true
 playback/repeat = true
 script = ExtResource( 9 )
+timing = 1.596
+offset = Vector3( 0, 0, -0.11 )
+rotation_a = Vector3( -0.086, 0, 0 )
 
 [node name="Camera_Orientation" type="Camera" parent="Real/MeshInstance/ward_room/Camera"]
-transform = Transform( 1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0 )
+transform = Transform( 1, 2.98028e-08, 8.94101e-08, -5.57562e-08, -0.110775, 0.993846, 9.72079e-09, -0.993846, -0.110775, 0, 0, 0 )
 current = true
 fov = 66.5
 near = 0.1
@@ -460,12 +472,14 @@ doppler_tracking = 1
 environment = ExtResource( 4 )
 
 [node name="Score" type="RichTextLabel" parent="."]
-margin_left = 11.0
-margin_top = 7.0
-margin_right = 248.0
-margin_bottom = 56.0
+margin_left = 16.0
+margin_top = 12.0
+margin_right = 424.0
+margin_bottom = 163.0
 mouse_filter = 1
-text = "Score: 0"
+theme = ExtResource( 12 )
+text = "Score: 0
+Hs: 8000"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -485,5 +499,19 @@ __meta__ = {
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/ColorRect"]
 anims/Blink = SubResource( 17 )
 
-[connection signal="area_entered" from="Character/Area" to="Character" method="_on_Area_area_entered"]
+[node name="Think" type="Label" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -608.0
+size_flags_horizontal = 0
+theme = ExtResource( 12 )
+custom_fonts/font = SubResource( 20 )
+text = "Press SPACE to think"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [connection signal="body_entered" from="Character/Area" to="Character" method="_on_Area_body_entered"]

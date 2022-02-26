@@ -6,9 +6,10 @@ func _input(event):
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	$Player/Character.imaginary = false
 	$Player/Score.visible = false
+	$Player/Character.imaginary = false
 	$Player/Character.switch()
+	$Player/Character.visible = false
 
 func on_pill_taken(_body):
 	$"Player/CanvasLayer/ColorRect/AnimationPlayer".play("Blink")

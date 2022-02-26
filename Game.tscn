@@ -12,7 +12,7 @@ _data = [ Vector2( 0, 1 ), 0.0, 5.0988, 0, 0, Vector2( 0.437097, 12.5982 ), 19.8
 [sub_resource type="Curve" id=2]
 min_value = 1.0
 max_value = 20.0
-_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.579032, 7.93558 ), 25.2945, 25.2945, 0, 0, Vector2( 1, 20 ), 1.4, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.25, 9.80061 ), 36.3292, 36.3292, 0, 0, Vector2( 1, 20 ), 1.4, 0.0, 0, 0 ]
 
 [node name="Game" type="Spatial"]
 script = ExtResource( 2 )
