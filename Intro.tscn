@@ -1,11 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Intro.gd" type="Script" id=1]
 [ext_resource path="res://Prefbs/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Audio/521777__machine_high.ogg" type="AudioStream" id=3]
 [ext_resource path="res://Bullet.gdshader" type="Shader" id=4]
-[ext_resource path="res://Theme.tres" type="Theme" id=5]
-[ext_resource path="res://Chomsky.otf" type="DynamicFontData" id=6]
 
 [sub_resource type="BoxShape" id=11]
 extents = Vector3( 3, 1.53142, 1.33828 )
@@ -27,10 +25,6 @@ shader_param/uv2_scale = null
 shader_param/uv2_offset = null
 shader_param/color1 = Color( 0.243137, 0, 0.572549, 1 )
 shader_param/color2 = Color( 0.415686, 0, 0, 1 )
-
-[sub_resource type="DynamicFont" id=14]
-size = 41
-font_data = ExtResource( 6 )
 
 [node name="Intro" type="Spatial"]
 script = ExtResource( 1 )
@@ -72,20 +66,5 @@ spot_angle_attenuation = 0.378929
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
-
-[node name="Think" type="Label" parent="."]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -608.0
-size_flags_horizontal = 0
-theme = ExtResource( 5 )
-custom_fonts/font = SubResource( 14 )
-text = "Press SPACE to think"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [connection signal="body_entered" from="Start/Level/Bullet/Area" to="." method="on_pill_taken"]

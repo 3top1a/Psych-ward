@@ -234,6 +234,8 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource( 1 )
 DoShoot = false
+BULLET_SPEED = 50.0
+SPHREAD = 4
 SHOTGUN_RAYS = [ NodePath("Pivot/Camera/Shutgun/RayCast"), NodePath("Pivot/Camera/Shutgun/RayCast2"), NodePath("Pivot/Camera/Shutgun/RayCast3"), NodePath("Pivot/Camera/Shutgun/RayCast4"), NodePath("Pivot/Camera/Shutgun/RayCast5"), NodePath("Pivot/Camera/Shutgun/RayCast6"), NodePath("Pivot/Camera/Shutgun/RayCast7"), NodePath("Pivot/Camera/Shutgun/RayCast8"), NodePath("Pivot/Camera/Shutgun/RayCast9"), NodePath("Pivot/Camera/Shutgun/RayCast10"), NodePath("Pivot/Camera/Shutgun/RayCast11"), NodePath("Pivot/Camera/Shutgun/RayCast12"), NodePath("Pivot/Camera/Shutgun/RayCast13"), NodePath("Pivot/Camera/Shutgun/RayCast14"), NodePath("Pivot/Camera/Shutgun/RayCast15") ]
 SWAY_LEFT = Vector3( 0, 0.2, 0 )
 SWAY_RIGHT = Vector3( 0, -0.2, 0 )
@@ -500,6 +502,7 @@ __meta__ = {
 anims/Blink = SubResource( 17 )
 
 [node name="Think" type="Label" parent="."]
+visible = false
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -44,17 +44,17 @@ shader_param/texture_emission = SubResource( 8 )
 
 [node name="Bullet" type="RigidBody"]
 collision_layer = 2
-gravity_scale = 4.0
+gravity_scale = 0.41
 continuous_cd = true
-contacts_reported = 2
+contacts_reported = 4
 contact_monitor = true
 script = ExtResource( 3 )
 c1_h = Vector2( 0, 360 )
-c1_s = Vector2( 0.5, 0.9 )
-c1_v = Vector2( 0.5, 0.9 )
+c1_s = Vector2( 0.5, 0.6 )
+c1_v = Vector2( 0.5, 0.7 )
 c2_h = Vector2( 0, 360 )
-c2_s = Vector2( 0.1, 0.5 )
-c2_v = Vector2( 0.1, 0.5 )
+c2_s = Vector2( 0.1, 0.3 )
+c2_v = Vector2( 0, 0.4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 8.74228e-09, 0.2, -1.74846e-08, 0.2, -8.74228e-09, 8.74228e-09, 8.74228e-09, -1.74846e-08, -0.2, 0, 0, 0 )
@@ -65,7 +65,7 @@ mesh = SubResource( 5 )
 material/0 = SubResource( 10 )
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 20.0
+wait_time = 5.0
 one_shot = true
 autostart = true
 

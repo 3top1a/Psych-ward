@@ -1,5 +1,6 @@
 extends Spatial
 
+var diff = .85
 
 export (Curve) var skulls
 export var skull_pre = preload("res://Prefbs/SkullHead.tscn")
@@ -21,7 +22,7 @@ func _process(delta):
 	time += delta
 	
 	skull_timer += delta
-	if skull_timer > skull_time:
+	if skull_timer > skull_time * diff:
 		skull_timer = 0
 		
 		for _x in range( int(skull_amount * skulls.interpolate(time / 1000)) ):
@@ -30,7 +31,7 @@ func _process(delta):
 			i.global_transform.origin = $"../Player/Character".global_transform.origin + (Vector3.FORWARD * skull_dist).rotated(Vector3.UP, rand_range(0, 360))
 	
 	head_timer += delta
-	if head_timer > head_time:
+	if head_timer > head_time * diff:
 		head_timer = 0
 		
 		for _x in range( int(head_amount * heads.interpolate(time / 1000)) ):

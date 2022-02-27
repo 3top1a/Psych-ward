@@ -12,7 +12,7 @@ export var GRAVITY = 15.0
 export var JUMP = 8.0
 export var BULLET_SPEED = 200.0
 export var SHOOT_TIME = .09
-export var SPHREAD = 5
+export var SPHREAD = 15
 export (Array, NodePath) var SHOTGUN_RAYS
 
 export var XSWAY = 20.0
@@ -33,6 +33,7 @@ var imaginary = false
 var mouse_mov = Vector3()
 var velocity = Vector3(0,0,0)
 var gun_velocity = Vector3(0,0,0)
+var minigun = false
 
 export onready var bullet = preload("res://Prefbs/Bullet.tscn")
 export onready var imaginary_env = preload("res://Imaginary.tres")
@@ -85,7 +86,7 @@ func _physics_process(delta):
 			
 			$"../CanvasLayer/ColorRect/AnimationPlayer".play("Blink")
 			$"../Think".visible = false
-			
+
 			switch()
 
 	## Move
@@ -100,52 +101,11 @@ func _physics_process(delta):
 	## Shoot
 	shoot_timer -= delta
 
-	if Input.is_action_just_pressed("fire") and shoot_timer < 0.0 and imaginary and DoShoot:
-		for r in SHOTGUN_RAYS:
-			get_node(r).cast_to.x = rand_range(SPHREAD, -SPHREAD)
-			get_node(r).cast_to.y = rand_range(SPHREAD, -SPHREAD)
+	if !(shoot_timer < 0.0 and imaginary and DoShoot):
+		return
 
-			var i = bullet.instance()
-			i.set_as_toplevel(true)
-			i.apply_impulse(i.transform.basis.z, -$Pivot/Camera.global_transform.basis.z * BULLET_SPEED)
-			get_tree().get_root().add_child(i)
-			var offset = (Vector3(get_node(r).cast_to.x * 2.0, get_node(r).cast_to.y, 0.0)*0.005)
-
-			i.transform.origin = (pos3D.global_transform.origin + offset)
-			i.apply_central_impulse((-$Pivot/Camera.global_transform.basis.z * BULLET_SPEED) + (offset * 1/0.005))
-
-			if get_node(r).get_collider():
-				var target = get_node(r).get_collider()
-				if target.has_method("damage"):
-					target.damage()
-		shoot_timer = SHOOT_TIME
-
-		# Sound
-		for _i in range(3):
-			var sound = bullet_snd.instance()
-			add_child(sound)
-			yield(get_tree(), "idle_frame")
-
-	if Input.is_action_pressed("fire") and shoot_timer < 0.0 and imaginary and DoShoot:
-		var i = bullet.instance()
-		i.set_as_toplevel(true)
-		i.apply_impulse(i.transform.basis.z, -$Pivot/Camera.global_transform.basis.z * BULLET_SPEED)
-		get_tree().get_root().add_child(i)
-		i.global_transform.basis = pos3D.global_transform.basis
-		i.global_transform.origin = pos3D.global_transform.origin
-		if $Pivot/Camera/RayCast.is_colliding():
-			var bullet = get_world().direct_space_state
-			var collision = bullet.intersect_ray( $Pivot/Camera.global_transform.origin, $Pivot/Camera/RayCast.get_collision_point())
-			
-			if collision:
-				var target = collision.collider
-				if target.has_method("damage"):
-					target.damage()
-		shoot_timer = SHOOT_TIME
-
-		# Sound
-		var sound = bullet_snd.instance()
-		add_child(sound)
+	if Input.is_action_pressed("fire"):
+		shoot_rifle()
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -153,6 +113,9 @@ func _unhandled_input(event):
 		$Pivot.rotate_x(-event.relative.y * mouse_sensitivity)
 		$Pivot.rotation.x = clamp($Pivot.rotation.x, -1.2, 1.2)
 		mouse_mov.x = -event.relative.x
+	elif event is InputEventMouseButton:
+		if event.doubleclick:
+			shoot_gun()
 
 func switch():
 	if imaginary:
@@ -162,9 +125,9 @@ func switch():
 		$"Pivot/Camera".current = true
 		$"../Imaginary/CanvasLayer".scale = Vector2(1,1)
 		$"../Real/CanvasLayer".scale = Vector2(0,0)
-		
+
 		$"../WorldEnvironment".set_environment(imaginary_env)
-		
+
 		$"../Real/breathing".playing = false
 		$"../Imaginary/north".playing = true
 		visible = true
@@ -189,3 +152,61 @@ func switch():
 func _on_Area_body_entered(body):
 	if body.has_method("damage") and imaginary:
 		get_tree().get_root().get_node("Game").lose()
+
+func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		get_tree().quit()
+
+func shoot_sound(_count = 1):
+	# Sound
+	for _i in range(_count):
+		var sound = bullet_snd.instance()
+		add_child(sound)
+		yield(get_tree(), "idle_frame")
+
+func shoot_rifle():
+	if shoot_timer > 0:
+		return
+
+	var i = bullet.instance()
+	i.set_as_toplevel(true)
+	i.apply_impulse(i.transform.basis.z, -$Pivot/Camera.global_transform.basis.z * BULLET_SPEED)
+	get_tree().get_root().add_child(i)
+	i.global_transform.basis = pos3D.global_transform.basis
+	i.global_transform.origin = pos3D.global_transform.origin
+	if $Pivot/Camera/RayCast.is_colliding():
+		var bullet = get_world().direct_space_state
+		var collision = bullet.intersect_ray( $Pivot/Camera.global_transform.origin, $Pivot/Camera/RayCast.get_collision_point())
+		if collision:
+			var target = collision.collider
+			if target.has_method("damage"):
+				target.damage()
+	shoot_timer = SHOOT_TIME
+
+	# Sound
+	shoot_sound(1)
+
+
+func shoot_gun():
+	if shoot_timer > 0:
+		return
+
+	for r in SHOTGUN_RAYS:
+		get_node(r).cast_to.x = rand_range(SPHREAD, -SPHREAD)
+		get_node(r).cast_to.y = rand_range(SPHREAD, -SPHREAD)
+
+		var i = bullet.instance()
+		i.set_as_toplevel(true)
+		i.apply_impulse(i.transform.basis.z, -$Pivot/Camera.global_transform.basis.z * BULLET_SPEED)
+		get_tree().get_root().add_child(i)
+		var offset = (Vector3(get_node(r).cast_to.x * 2.0, get_node(r).cast_to.y, 0.0)*0.005)
+
+		i.transform.origin = (pos3D.global_transform.origin + offset)
+		i.apply_central_impulse((-$Pivot/Camera.global_transform.basis.z * BULLET_SPEED) + (offset * 1/0.005))
+
+		if get_node(r).get_collider():
+			var target = get_node(r).get_collider()
+			if target.has_method("damage"):
+				target.damage()
+	shoot_timer = SHOOT_TIME * 5
+	shoot_sound(3)

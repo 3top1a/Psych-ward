@@ -29,11 +29,18 @@ config/icon="res://icon.png"
 
 mix_rate=48000
 
+[autoload]
+
+ggsManager="res://addons/GGS/src/ggs_manager.gd"
+
 [display]
 
-window/size/width=1366
-window/size/height=768
+window/size/resizable=false
 window/size/fullscreen=true
+
+[editor_plugins]
+
+enabled=PoolStringArray(  )
 
 [input]
 
@@ -74,6 +81,7 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+quality/filters/sharpen_intensity=0.07
 threads/thread_model=2
 threads/thread_safe_bvh=true
 quality/filters/anisotropic_filter_level=16

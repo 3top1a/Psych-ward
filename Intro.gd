@@ -1,15 +1,13 @@
 extends Spatial
 
-func _input(event):
-	if event.is_action_pressed("ui_cancel"):
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	$Player/Score.visible = false
 	$Player/Character.imaginary = false
 	$Player/Character.switch()
 	$Player/Character.visible = false
+	$Player/Think.visible = true
+
 
 func on_pill_taken(_body):
 	$"Player/CanvasLayer/ColorRect/AnimationPlayer".play("Blink")
