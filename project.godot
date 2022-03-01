@@ -22,16 +22,17 @@ _global_script_class_icons={
 
 config/name="SymplE"
 run/main_scene="res://Intro.tscn"
+run/disable_stdout=true
+run/disable_stderr=true
+boot_splash/image="res://icon.png"
+boot_splash/use_filter=false
 boot_splash/bg_color=Color( 0.0627451, 0.0627451, 0.0627451, 1 )
 config/icon="res://icon.png"
+config/windows_native_icon="res://icon.ico"
 
 [audio]
 
 mix_rate=48000
-
-[autoload]
-
-ggsManager="res://addons/GGS/src/ggs_manager.gd"
 
 [display]
 
@@ -82,7 +83,6 @@ common/enable_pause_aware_picking=true
 [rendering]
 
 quality/filters/sharpen_intensity=0.07
-threads/thread_model=2
 threads/thread_safe_bvh=true
 quality/filters/anisotropic_filter_level=16
 quality/filters/msaa=4

@@ -5,6 +5,7 @@ export var DoShoot = true
 
 export var speed = 8
 export var mouse_sensitivity = 0.01
+export var setting_mouse_sensitivity = 0.01
 export var gun_sensitivity = 1.0
 
 export var ACCELERATION = 20.0
@@ -43,6 +44,16 @@ export onready var bullet_snd = preload("res://Prefbs/BulletSound.tscn")
 func _ready():
 	gun.set_as_toplevel(true)
 	randomize()
+	var file = File.new()
+	if file.file_exists("user://totally_not_just_your_sens.dat"):
+		file.open("user://totally_not_just_your_sens.dat", File.READ)
+		setting_mouse_sensitivity = file.get_var()
+		file.close()
+	else:
+		$"../Settings/VBoxContainer/SensS".value = mouse_sensitivity
+		file.open("user://totally_not_just_your_sens.dat", File.WRITE)
+		file.store_var(mouse_sensitivity, false)
+		file.close()
 
 func _process(delta):
 	## Ground
@@ -155,7 +166,11 @@ func _on_Area_body_entered(body):
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
-		get_tree().quit()
+		$"../Settings".visible = !$"../Settings".visible
+		if $"../Settings".visible:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		else:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func shoot_sound(_count = 1):
 	# Sound
@@ -210,3 +225,14 @@ func shoot_gun():
 				target.damage()
 	shoot_timer = SHOOT_TIME * 5
 	shoot_sound(3)
+
+
+func _on_Exit_pressed():
+	get_tree().quit()
+
+func _on_SensS_value_changed(value):
+	mouse_sensitivity = value
+	var file = File.new()
+	file.open("user://totally_not_just_your_sens.dat", File.WRITE)
+	file.store_var(mouse_sensitivity, false)
+	file.close()
