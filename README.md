@@ -1,5 +1,7 @@
 # Psychic Trial - Entry for [Brackeys Game Jam 2022.1](https://itch.io/jam/brackeys-7)
 
+### Download from this GitHub's release page for the newest version!
+
 Stuff learned:
 - **GAMEPLAY FUCKING FIRST**
 - **UX SECOND**
