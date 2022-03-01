@@ -45,13 +45,15 @@ func _ready():
 	gun.set_as_toplevel(true)
 	randomize()
 	var file = File.new()
-	if file.file_exists("user://totally_not_just_your_sens.dat"):
-		file.open("user://totally_not_just_your_sens.dat", File.READ)
-		setting_mouse_sensitivity = file.get_var()
+	if file.file_exists("user://totally_not_just_your_sens.tres"):
+		file.open("user://totally_not_just_your_sens.tres", File.READ)
+		mouse_sensitivity = file.get_var()
+		$"../Settings/VBoxContainer/SensS".value = mouse_sensitivity
 		file.close()
 	else:
+		file = File.new()
 		$"../Settings/VBoxContainer/SensS".value = mouse_sensitivity
-		file.open("user://totally_not_just_your_sens.dat", File.WRITE)
+		file.open("user://totally_not_just_your_sens.tres", File.WRITE)
 		file.store_var(mouse_sensitivity, false)
 		file.close()
 
@@ -233,6 +235,6 @@ func _on_Exit_pressed():
 func _on_SensS_value_changed(value):
 	mouse_sensitivity = value
 	var file = File.new()
-	file.open("user://totally_not_just_your_sens.dat", File.WRITE)
-	file.store_var(mouse_sensitivity, false)
+	file.open("user://totally_not_just_your_sens.tres", File.WRITE)
+	file.store_var(value, false)
 	file.close()
